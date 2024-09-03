@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/joho/godotenv"
 	"log"
 	"math/big"
+	"os"
 	"strings"
 
 	"github.com/ethereum/go-ethereum"
@@ -27,7 +29,14 @@ func main() {
 }
 
 func gasCalculated(wallet, from, to, contract, token string, amount int) *big.Int {
-	apiKey := ""
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	apiKey := os.Getenv("INFURA_API_KEY")
+	if apiKey == "" {
+		log.Fatalf("INFURA_API_KEY environment variable is required")
+	}
 	url := "https://mainnet.infura.io/v3/" + apiKey
 	client, err := ethclient.Dial(url)
 	if err != nil {
