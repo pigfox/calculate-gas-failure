@@ -1,5 +1,5 @@
 # calculate-gas-failure
-A standalone file that reproduces a Go-Ethereum gas calculation failure.
+A standalone file that reproduces a Go-Ethereum gas calculation failure in a larger project.
 
 You need your own Infura API key for Ethereum Main net to view the error.
 
