@@ -100,12 +100,11 @@ func gasCalculated(wallet, from, to, contract, token string, amount int) *big.In
 	callMsg := ethereum.CallMsg{
 		From:     fromAddress,
 		To:       &contractAddress,
-		GasPrice: gasPrice, // Let the client decide the gas price
+		GasPrice: gasPrice,
 		Value:    big.NewInt(0),
 		Data:     data,
 	}
 
-	/*	*/
 	header, err := client.HeaderByNumber(ctx, nil)
 	if err != nil {
 		fmt.Println("Failed to get header:", err)
