@@ -125,7 +125,7 @@ func gasCalculated(wallet, from, to, contract, token string, amount int) *big.In
 	// Estimate the gas required for the transaction
 	gasLimit, err := client.EstimateGas(ctx, callMsg)
 	if err != nil {
-		fmt.Println("Failed to estimate gas:", err)
+		fmt.Printf("Failed to estimate gas: %v.", err)
 		return big.NewInt(0)
 	}
 
