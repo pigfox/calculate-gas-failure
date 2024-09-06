@@ -115,7 +115,7 @@ func gasCalculated(wallet, from, to, contract, token string, amount int) *big.In
 	var result hexutil.Bytes
 	result, err = client.CallContract(ctx, callMsg, header.Number)
 	if err != nil {
-		fmt.Printf("Low-level call %v\n", err) //<--Low-level call execution reverted
+		fmt.Printf("Low-level call %v\n", err) //<--Low-level call err: insufficient funds for gas * price + value: address 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D have 25000000000000000 want 697371316500000000 (supplied gas 500000000)
 		return big.NewInt(0)
 	}
 
