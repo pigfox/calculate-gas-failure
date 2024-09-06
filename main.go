@@ -90,15 +90,21 @@ func gasCalculated(wallet, from, to, contract, token string, amount int) *big.In
 		return big.NewInt(0)
 	}
 
+	ctx := context.Background()
+
+	gasPrice, err := client.SuggestGasPrice(ctx)
+	if err != nil {
+		log.Fatalf("Failed to suggest gas price: %v", err)
+	}
+
 	callMsg := ethereum.CallMsg{
 		From:     fromAddress,
 		To:       &contractAddress,
-		GasPrice: nil, // Let the client decide the gas price
+		GasPrice: gasPrice, // Let the client decide the gas price
 		Value:    big.NewInt(0),
 		Data:     data,
 	}
 
-	ctx := context.Background()
 	/*	*/
 	header, err := client.HeaderByNumber(ctx, nil)
 	if err != nil {
