@@ -29,15 +29,22 @@ func main() {
 }
 
 func gasCalculated(wallet, from, to, contract, token string, amount int) *big.Int {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	localHost := false
+	url := ""
+	if localHost {
+		url = "http://127.0.0.1:8545"
+	} else {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
+		apiKey := os.Getenv("INFURA_API_KEY")
+		if apiKey == "" {
+			log.Fatalf("INFURA_API_KEY environment variable is required")
+		}
+		url = "https://mainnet.infura.io/v3/" + apiKey
 	}
-	apiKey := os.Getenv("INFURA_API_KEY")
-	if apiKey == "" {
-		log.Fatalf("INFURA_API_KEY environment variable is required")
-	}
-	url := "https://mainnet.infura.io/v3/" + apiKey
+
 	client, err := ethclient.Dial(url)
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
@@ -94,8 +101,9 @@ func gasCalculated(wallet, from, to, contract, token string, amount int) *big.In
 
 	gasPrice, err := client.SuggestGasPrice(ctx)
 	if err != nil {
-		log.Fatalf("Failed to suggest gas price: %v", err)
+		log.Fatalf("Failed to suggest gas price: %v", gasPrice)
 	}
+	fmt.Println("gasPrice:", gasPrice)
 
 	callMsg := ethereum.CallMsg{
 		From:     fromAddress,
@@ -104,6 +112,14 @@ func gasCalculated(wallet, from, to, contract, token string, amount int) *big.In
 		Value:    big.NewInt(0),
 		Data:     data,
 	}
+
+	// Estimate the gas required for the transaction
+	gasLimit, err := client.EstimateGas(ctx, callMsg)
+	if err != nil {
+		fmt.Printf("Failed to estimate gas: %v.", err) //<--Failed to estimate gas: execution reverted.gas 0
+		return big.NewInt(0)
+	}
+	fmt.Println("gasLimit:", gasLimit)
 
 	header, err := client.HeaderByNumber(ctx, nil)
 	if err != nil {
@@ -115,19 +131,12 @@ func gasCalculated(wallet, from, to, contract, token string, amount int) *big.In
 	var result hexutil.Bytes
 	result, err = client.CallContract(ctx, callMsg, header.Number)
 	if err != nil {
-		fmt.Printf("Low-level call %v\n", err) //<--Low-level call err: insufficient funds for gas * price + value: address 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D have 25000000000000000 want 697371316500000000 (supplied gas 500000000)
+		fmt.Printf("Low-level call %v\n", err)
 		return big.NewInt(0)
 	}
 
 	// Decode or inspect `result` to understand the failure
 	fmt.Printf("Low-level call result: %x\n", result)
-
-	// Estimate the gas required for the transaction
-	gasLimit, err := client.EstimateGas(ctx, callMsg)
-	if err != nil {
-		fmt.Printf("Failed to estimate gas: %v.", err)
-		return big.NewInt(0)
-	}
 
 	return big.NewInt(int64(gasLimit))
 }
