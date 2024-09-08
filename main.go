@@ -16,8 +16,17 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
+var localHost = false
+
 func main() {
-	wallet := "0x478d21c5167CB66AdEDAFA8D72D1f3757F6e6206"
+	wallet := ""
+	if localHost {
+		//get wallet address from anvil
+		wallet = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+	} else {
+		wallet = "0x478d21c5167CB66AdEDAFA8D72D1f3757F6e6206"
+	}
+
 	from := "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
 	to := "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F"
 	contract := "0xcBc57F275dB5fd2F4da20882fCa443B9cd302eCD"
@@ -29,7 +38,6 @@ func main() {
 }
 
 func gasCalculated(wallet, from, to, contract, token string, amount int) *big.Int {
-	localHost := false
 	url := ""
 	if localHost {
 		url = "http://127.0.0.1:8545"
