@@ -24,4 +24,5 @@ go.work.sum
 # env file
 .env
 flash-loan-simulation/lib
+out
 
