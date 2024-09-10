@@ -21,7 +21,7 @@ A.1 Flash Borrower smart contract example
 To run this code.
 ```
 In terminal 1: $ anvil
-Choose the address form the terminal above and add it to the main.go file
+Choose the address from the terminal above and add it to the main.go file
 Choose the private key from the terminal above and add it to the flash-loan-simulation/script/FlashloanReceiver.s.sol
 In terminal 2: 
 $ forge script script/FlashloanReceiver.s.sol --rpc-url http://127.0.0.1:8545 --broadcast
