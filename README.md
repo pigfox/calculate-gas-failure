@@ -25,8 +25,8 @@ Choose the address from the terminal above and add it to the main.go file
 Choose the private key from the terminal above and add it to the flash-loan-simulation/script/FlashloanReceiver.s.sol
 In terminal 2: 
 $ forge script script/FlashloanReceiver.s.sol --rpc-url http://127.0.0.1:8545 --broadcast
-flash-loan-simulation forge$ test --fork-url http://127.0.0.1:8545
-flash-loan-simulation$forge$ test --fork-url http://127.0.0.1:8545 --debug testFlashloan
+flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545
+flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 --debug test_flashloan --match-contract FlashloanReceiverTest
 In terminal 3: $ go run main.go
 ```
 
