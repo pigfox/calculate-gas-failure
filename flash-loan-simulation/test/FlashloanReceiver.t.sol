@@ -39,64 +39,89 @@ contract FlashloanReceiverTest0 is Test {
         receiver = new FlashloanReceiver(OWNER);
         baseToken = IERC20(BASE_TOKEN);
     }
-    /*
-       function test_flashloan() public {
-           console.log("43");
-           console.log("Test message");
-           console.log("45");
-       }
-      */
-        function test_flashloan() public {
-            console.log("Starting");
-           // Encode the data required for flash loan: buy DEX, sell DEX, and asset token addresses
-           bytes memory data = abi.encode(BUY_DEX, SELL_DEX, ASSET_TOKEN);
-            console.log("53");
-           // Initial balances before the flash loan
-           uint initialOwnerBalance = baseToken.balanceOf(OWNER);
-           console.log("56");
-           uint initialReceiverBalance = baseToken.balanceOf(address(receiver));
-           console.log("58");
-           // "Cheat" by adding some base tokens to the receiver, simulating the start with a small balance
-           deal(BASE_TOKEN, address(receiver), BASE_AMOUNT * 5 / 100); // Simulate profit situation
-           console.log("61");
-           // Trigger the flash loan
-           bool success = provider.flashLoan(
-               address(receiver),
-               BASE_TOKEN,
-               BASE_AMOUNT,
-               data
-           );
-           console.log("68");
-           // Assert flash loan call was successful
-           assertTrue(success, "Flash loan did not succeed");
 
-           // Check if the receiver has paid back the loan plus the fee
-           uint finalReceiverBalance = baseToken.balanceOf(address(receiver));
-           assertEq(finalReceiverBalance, initialReceiverBalance, "Flash loan repayment failed");
-
-           // Assert the owner has received the profit
-           uint finalOwnerBalance = baseToken.balanceOf(OWNER);
-           assertGt(finalOwnerBalance, initialOwnerBalance, "Profit was not transferred to the owner");
-
-           console.log("Profit transferred: ", finalOwnerBalance - initialOwnerBalance);
-       }
-
-/*
     function test_flashloan() public {
-        console.log("OWNER:",OWNER);
-        //1. Trigger flashloan
-        //2. Verify that we have made a profit
-        bytes memory data = abi.encode(BUY_DEX, SELL_DEX, ASSET_TOKEN); 
-        deal(BASE_TOKEN, address(receiver), BASE_AMOUNT * 5 / 100); //We "cheat" by sending some base asset to the flashloan contract, to simulate a profit
-        provider.flashLoan(
-            address(receiver),
-            BASE_TOKEN,
-            BASE_AMOUNT,
-            data
-        );
-        assertGt(baseToken.balanceOf(OWNER), 0);
+        console.log("Starting");
+       // Encode the data required for flash loan: buy DEX, sell DEX, and asset token addresses
+       bytes memory data = abi.encode(BUY_DEX, SELL_DEX, ASSET_TOKEN);
+        console.log("53");
+       // Initial balances before the flash loan
+       uint initialOwnerBalance = baseToken.balanceOf(OWNER);
+       console.log("56");
+       uint initialReceiverBalance = baseToken.balanceOf(address(receiver));
+       console.log("58");
+       // "Cheat" by adding some base tokens to the receiver, simulating the start with a small balance
+       deal(BASE_TOKEN, address(receiver), BASE_AMOUNT * 5 / 100); // Simulate profit situation
+       console.log("61");
+       // Trigger the flash loan
+       bool success = provider.flashLoan(
+           address(receiver),
+           BASE_TOKEN,
+           BASE_AMOUNT,
+           data
+       );
+       console.log("68");
+       // Assert flash loan call was successful
+       assertTrue(success, "Flash loan did not succeed");
+
+       // Check if the receiver has paid back the loan plus the fee
+       uint finalReceiverBalance = baseToken.balanceOf(address(receiver));
+       assertEq(finalReceiverBalance, initialReceiverBalance, "Flash loan repayment failed");
+
+       // Assert the owner has received the profit
+       uint finalOwnerBalance = baseToken.balanceOf(OWNER);
+       assertGt(finalOwnerBalance, initialOwnerBalance, "Profit was not transferred to the owner");
+
+       console.log("Profit transferred: ", finalOwnerBalance - initialOwnerBalance);
     }
-*/
+
+    function test_checkOwnerETHBalanceAndTransfer() public {
+        // Log the initial ETH balance of OWNER before any deal
+        console.log("Initial OWNER ETH balance:", OWNER.balance);
+
+        // Pre-fund OWNER with 10 ETH using vm.deal
+        vm.deal(OWNER, 10 * 1e18);
+
+        // Log the updated ETH balance after the deal
+        console.log("Updated OWNER ETH balance after deal:", OWNER.balance);
+
+        // Start impersonating the OWNER account
+        vm.startPrank(OWNER);
+
+        // Transfer 5 ETH from OWNER to receiver
+        address payable receiver = payable(
+            address(0x1234567890123456789012345678901234567890)
+        ); // Example receiver address
+        receiver.transfer(5 * 1e18); // Transfer 5 ETH to the receiver
+
+        // Stop impersonation
+        vm.stopPrank();
+
+        // Check the ETH balance of OWNER after the transfer
+        uint256 ownerEthBalance = OWNER.balance;
+        console.log("OWNER ETH balance after transfer:", ownerEthBalance);
+
+        // Check the ETH balance of the receiver after the transfer
+        uint256 receiverEthBalance = receiver.balance;
+        console.log(
+            "Receiver ETH balance after receiving ETH:",
+            receiverEthBalance
+        );
+
+        // Assert the balance is correct
+        assertEq(
+            ownerEthBalance,
+            5 * 1e18, // Expecting 5 ETH left in OWNER's balance
+            "OWNER ETH balance does not match expected amount after transfer"
+        );
+
+        assertEq(
+            receiverEthBalance,
+            5 * 1e18, // Expecting 5 ETH received by the receiver
+            "Receiver ETH balance does not match expected amount after receiving"
+        );
+    }
+
     function test_updateOwner_succeeds() public {
         address newOwner = address(2);
         vm.prank(OWNER);
