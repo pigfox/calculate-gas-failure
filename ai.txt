@@ -98,4 +98,102 @@ Set up and run Anvil as your local testnet.
 Deploy your contract using Forge scripts.
 Modify your Go program to connect to the local testnet and run it to interact with the deployed contract.
 Use Forge and Anvil debugging tools to inspect any issues with the transactions.
-Let me know if you need further assistance with any of these steps!
+----------------------------------------------------------------------------------------------
+Anvil is a local Ethereum node simulator provided by Foundry, useful for testing and debugging smart contracts in a controlled environment. It provides a fast, reliable way to deploy and interact with contracts without needing a real blockchain network. Below are the steps to debug smart contracts using Anvil.
+
+Debugging with Anvil
+Install Foundry and Anvil (if not already installed):
+
+Ensure you have Foundry installed. If not, install it by running:
+
+bash
+Copy code
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+Start Anvil:
+
+Anvil can be started with a simple command that initializes a local blockchain with test accounts.
+
+bash
+Copy code
+anvil
+This will start a local Ethereum node on http://127.0.0.1:8545 with 10 accounts pre-funded with ETH for testing.
+
+Deploy Contracts to Anvil:
+
+You can deploy your smart contracts to the local Anvil node using Forge. For example, if you have a deployment script named FlashloanReceiver.s.sol, you can deploy it using:
+
+bash
+Copy code
+forge script script/FlashloanReceiver.s.sol:FlashloanReceiverScript --fork-url http://127.0.0.1:8545 --broadcast
+--fork-url specifies the URL of the Anvil node.
+--broadcast sends the transactions instead of simulating them.
+Run Tests on Anvil:
+
+To run tests specifically against the Anvil instance, you can run:
+
+bash
+Copy code
+forge test --fork-url http://127.0.0.1:8545
+This command runs the tests against the live Anvil environment, allowing you to debug issues in a realistic setup.
+
+Interact with Contracts Using Cast:
+
+Foundry's cast command lets you interact with contracts on the Anvil network. For example, to check the balance of an account:
+
+bash
+Copy code
+cast balance <ACCOUNT_ADDRESS> --rpc-url http://127.0.0.1:8545
+To call a function in a deployed contract:
+
+bash
+Copy code
+cast send <CONTRACT_ADDRESS> "functionName(arguments)" --rpc-url http://127.0.0.1:8545 --private-key <PRIVATE_KEY>
+Debugging Transactions:
+
+If you encounter a failed transaction, you can use Anvil’s debug functionality to trace it. Here’s how to use it:
+
+Check Anvil Logs: When you run transactions, Anvil logs the input, output, gas used, and any errors encountered.
+Verbose Mode: Start Anvil in verbose mode to get detailed logs:
+bash
+Copy code
+anvil -v
+Trace Failed Transactions: Use the --debug flag in Anvil to provide trace-level logging:
+bash
+Copy code
+anvil --debug
+This allows you to see detailed stack traces and revert reasons for failed transactions.
+
+Using Forge's Debugger:
+
+Forge also includes a built-in debugger that can step through failed tests:
+
+bash
+Copy code
+forge test --debug
+When a test fails, the debugger will be triggered, allowing you to inspect state variables, transaction details, and other relevant data.
+
+Example Workflow
+Here’s a step-by-step example of debugging a failed transaction:
+
+Start Anvil:
+
+bash
+Copy code
+anvil
+Deploy the contract:
+
+bash
+Copy code
+forge script script/FlashloanReceiver.s.sol:FlashloanReceiverScript --fork-url http://127.0.0.1:8545 --broadcast
+Run the test and trigger the debugger on failure:
+
+bash
+Copy code
+forge clean
+forge build
+forge test --fork-url http://127.0.0.1:8545 --debug test_flashloan
+
+Inspect transaction details in the Anvil logs to understand what went wrong.
+
+These steps should help you effectively debug your smart contracts using Anvil! Let me know if you need further assistance with any specific part of this process.

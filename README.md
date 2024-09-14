@@ -27,6 +27,8 @@ In terminal 2:
 $ forge script script/FlashloanReceiver.s.sol --rpc-url http://127.0.0.1:8545 --broadcast
 flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 -vvv
 flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 --match-contract FlashloanReceiverTest --match-test test_flashloan -vvv
+flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 --match-contract FlashloanReceiverTest --match-test test_checkOwnerETHBalanceAndTransfer -vvv
+
 flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 --match-contract FlashloanReceiverTest --debug test_flashloan
 flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 --match-contract ExampleTest --debug test_logging
 

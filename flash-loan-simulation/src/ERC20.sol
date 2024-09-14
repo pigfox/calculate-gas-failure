@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/ERC20.sol)
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.26;
 
 import {IERC20} from "./IERC20.sol";
-import {IERC20Metadata} from "./extensions/IERC20Metadata.sol";
-import {Context} from "../../utils/Context.sol";
-import {IERC20Errors} from "../../interfaces/draft-IERC6093.sol";
+import {IERC20Metadata} from "./IERC20Metadata.sol";
+import {Context} from "./Context.sol";
+import {IERC20Errors} from "./draft-IERC6093.sol";
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -218,13 +218,21 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
      *
      * NOTE: This function is not virtual, {_update} should be overridden instead.
      */
+    function mint(address account, uint256 value) public {
+        require(account != address(0), "ERC20: mint to the zero address");
+
+        _totalSupply += value;
+        _balances[account] += value;
+        emit Transfer(address(0), account, value);
+    }
+     /*
     function _mint(address account, uint256 value) internal {
         if (account == address(0)) {
             revert ERC20InvalidReceiver(address(0));
         }
         _update(address(0), account, value);
     }
-
+*/
     /**
      * @dev Destroys a `value` amount of tokens from `account`, lowering the total supply.
      * Relies on the `_update` mechanism.
