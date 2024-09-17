@@ -9,12 +9,14 @@ import {Arbitrage} from "../src/Arbitrage.sol";
 import {Dex1} from "../src/Dex1.sol";
 import {Dex2} from "../src/Dex2.sol";
 import {XToken} from "../src/XToken.sol";
+import {MockFlashLoanProvider} from "../src/MockFlashLoanProvider.sol";
 
 contract ArbitrageTest is Test {
     Arbitrage public arbitrage;
     Dex1 public dex1;
     Dex2 public dex2;
     XToken public xtoken;
+    MockFlashLoanProvider public mfp;
 
     function setUp() public {
         console.log("Begin Setup");
@@ -27,6 +29,8 @@ contract ArbitrageTest is Test {
         xtoken.suppy(address(dex2), 5000);
         arbitrage = new Arbitrage(address(dex1), address(dex2), address(xtoken));
         xtoken.suppy(address(arbitrage), 1000);
+        MockFlashLoanProvider mfp = new MockFlashLoanProvider();
+        xtoken.suppy(address(mfp), 100000);
 
         console.log("arbitrage:", address(arbitrage));
         console.log("xtoken:", address(xtoken));
@@ -36,6 +40,7 @@ contract ArbitrageTest is Test {
         console.log("dex2.balance:", address(dex2).balance);
         console.log("dex1.getPrice(address(xtoken)):", dex1.getPrice(address(xtoken)));
         console.log("dex2.getPrice(address(xtoken)):", dex2.getPrice(address(xtoken)));
+        console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));
         console.log("End Setup");
     }
 
