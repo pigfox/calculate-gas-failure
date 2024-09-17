@@ -34,6 +34,8 @@ contract ArbitrageTest is Test {
         console.log("dex1.balance:", address(dex1).balance);
         console.log("dex2:", address(dex2));
         console.log("dex2.balance:", address(dex2).balance);
+        console.log("dex1.getPrice(address(xtoken)):", dex1.getPrice(address(xtoken)));
+        console.log("dex2.getPrice(address(xtoken)):", dex2.getPrice(address(xtoken)));
         console.log("End Setup");
     }
 

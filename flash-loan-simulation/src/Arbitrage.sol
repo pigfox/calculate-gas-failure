@@ -31,7 +31,7 @@ contract Arbitrage{
     function checkAndExecuteArbitrage(uint256 amount) external onlyOwner {
         uint256 priceDex1 = dex1.getPrice(address(xtoken));
         uint256 priceDex2 = dex2.getPrice(address(xtoken));
-        
+
         // Calculate the price difference percentage
         uint256 priceDiff = priceDex1 > priceDex2
             ? ((priceDex1 - priceDex2) * 100) / priceDex1

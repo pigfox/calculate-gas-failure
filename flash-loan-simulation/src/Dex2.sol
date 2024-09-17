@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 // Interface IDex
 interface IDex {
-    function getPrice(address token) external view returns (uint256);
+    function getPrice(address token) external returns (uint256);
     function swap(address token, uint256 amount) external;
 }
 
@@ -13,8 +13,8 @@ contract Dex2 is IDex {
     uint256 private price = 95;
 
     // Implements the getPrice function
-    function getPrice(address token) external pure override returns (uint256) {
-        return 95;
+    function getPrice(address token) external returns (uint256) {
+        return price;
     }
     
     // Implements the swap function
