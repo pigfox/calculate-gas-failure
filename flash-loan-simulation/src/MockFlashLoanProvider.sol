@@ -27,6 +27,11 @@ contract MockFlashLoanProvider{
         payable(recipient).transfer(amount);
     }
 
+    function borrow(address recipient, uint256 amount) external{
+        require(amount <= address(this).balance, "Insufficient balance");
+        payable(recipient).transfer(amount);
+    }
+
     function deposit() external payable {}
     // Receive function to accept ETH
     receive() external payable {}
