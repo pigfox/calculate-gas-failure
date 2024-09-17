@@ -12,6 +12,7 @@ import {XToken} from "../src/XToken.sol";
 import {MockFlashLoanProvider} from "../src/MockFlashLoanProvider.sol";
 
 contract ArbitrageTest is Test {
+    uint swapAmount = 500;
     Arbitrage public arbitrage;
     Dex1 public dex1;
     Dex2 public dex2;
@@ -49,7 +50,7 @@ contract ArbitrageTest is Test {
         console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         console.log("xtoken.balanceOf(address(dex1)):", xtoken.balanceOf(address(dex1)));
         console.log("xtoken.balanceOf(address(dex2)):", xtoken.balanceOf(address(dex2)));
-        arbitrage.checkAndExecuteArbitrage(500);
+        arbitrage.checkAndExecuteArbitrage(swapAmount);
         console.log("After swap");
         console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         console.log("xtoken.balanceOf(address(dex1)):", xtoken.balanceOf(address(dex1)));
