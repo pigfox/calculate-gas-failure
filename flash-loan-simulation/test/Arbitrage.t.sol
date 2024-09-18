@@ -20,9 +20,9 @@ contract ArbitrageTest is Test {
     function setUp() public {
         console.log("Begin Setup");
         dex1 = new Dex1();
-        vm.deal(address(dex1), 10 * 1e18);
+        //vm.deal(address(dex1), 10 * 1e18);
         dex2 = new Dex2();
-        vm.deal(address(dex2), 10 * 1e18);
+        //vm.deal(address(dex2), 10 * 1e18);
         xtoken = new XToken(0);
         xtoken.suppy(address(dex1), 25000);
         xtoken.suppy(address(dex2), 5000);

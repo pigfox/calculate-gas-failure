@@ -43,12 +43,14 @@ contract Arbitrage{
         
         if (priceDiff >= threshold) {
             if (priceDex1 > priceDex2) {
+                console.log("Buy from DEX2 (lower price) and sell on DEX1 (higher price)");
                 // Arbitrage: Buy from DEX2 (lower price) and sell on DEX1 (higher price)
                 xtoken.approve(address(dex2), amount);
                 dex2.swap(address(xtoken), amount);
                 xtoken.approve(address(dex1), amount);
                 dex1.swap(address(xtoken), amount);
             } else {
+                console.log("Buy from DEX1 (lower price) and sell on DEX2 (higher price");
                 // Arbitrage: Buy from DEX1 (lower price) and sell on DEX2 (higher price)
                 xtoken.approve(address(dex1), amount);
                 dex1.swap(address(xtoken), amount);
