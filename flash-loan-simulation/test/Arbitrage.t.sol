@@ -7,6 +7,7 @@ import {Arbitrage} from "../src/Arbitrage.sol";
 import {Dex1} from "../src/Dex1.sol";
 import {Dex2} from "../src/Dex2.sol";
 import {XToken} from "../src/XToken.sol";
+import {Vault} from "../src/Vault.sol";
 import {MockFlashLoanProvider} from "../src/MockFlashLoanProvider.sol";
 
 contract ArbitrageTest is Test {
@@ -16,10 +17,12 @@ contract ArbitrageTest is Test {
     Dex2 public dex2;
     XToken public xtoken;
     MockFlashLoanProvider public mfp;
+    Vault public vault;
 
     function setUp() public {
         console.log("Begin Setup");
         mfp = new MockFlashLoanProvider();
+        vault = new Vault();
         dex1 = new Dex1();
         vm.deal(address(dex1), 10 * 1e18);
         dex2 = new Dex2();

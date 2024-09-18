@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
+/*
+Destination for profits of flash loans and arbitrage operations
+*/
 pragma solidity 0.8.26;
 
 
