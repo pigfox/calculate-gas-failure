@@ -18,9 +18,16 @@ contract Dex1 is IDex {
     }
     
     // Implements the swap function
-    function swap(address token, uint256 amount) external override {
-        IERC20(token).transferFrom(msg.sender, address(this), amount);
-        // Implement swap logic here if needed
+    function swap(address tokenAddress, uint amount) public {
+        IERC20 token = IERC20(tokenAddress);
+        // Ensure Dex1 has enough balance for the swap
+        require(token.balanceOf(address(this)) >= amount, "Dex1: Not enough liquidity");
+
+        // Transfer tokens from Arbitrage contract to Dex1
+        require(token.transferFrom(msg.sender, address(this), amount), "Dex1: Transfer failed");
+
+        // You could add logic here to simulate buying back at a certain price, 
+        // or returning another asset if you're simulating a swap between different tokens
     }
 
     function balance() external view returns (uint256) {

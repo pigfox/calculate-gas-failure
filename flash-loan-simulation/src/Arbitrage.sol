@@ -42,20 +42,28 @@ contract Arbitrage{
         console.log("Price difference: %d", priceDiff);
         
         if (priceDiff >= threshold) {
+            uint256 tokensToSwap;
+            
             if (priceDex1 > priceDex2) {
                 console.log("Buy from DEX2 (lower price) and sell on DEX1 (higher price)");
                 // Arbitrage: Buy from DEX2 (lower price) and sell on DEX1 (higher price)
                 xtoken.approve(address(dex2), amount);
                 dex2.swap(address(xtoken), amount);
-                xtoken.approve(address(dex1), amount);
-                dex1.swap(address(xtoken), amount);
+
+                // Check the new balance after swap
+                tokensToSwap = xtoken.balanceOf(address(this));
+                xtoken.approve(address(dex1), tokensToSwap);
+                dex1.swap(address(xtoken), tokensToSwap);
             } else {
                 console.log("Buy from DEX1 (lower price) and sell on DEX2 (higher price");
                 // Arbitrage: Buy from DEX1 (lower price) and sell on DEX2 (higher price)
                 xtoken.approve(address(dex1), amount);
                 dex1.swap(address(xtoken), amount);
-                xtoken.approve(address(dex2), amount);
-                dex2.swap(address(xtoken), amount);
+
+                // Check the new balance after swap
+                tokensToSwap = xtoken.balanceOf(address(this));
+                xtoken.approve(address(dex2), tokensToSwap);
+                dex2.swap(address(xtoken), tokensToSwap);
             }
         }
     }
