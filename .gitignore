@@ -25,4 +25,5 @@ go.work.sum
 .env
 flash-loan-simulation/lib
 flash-loan-simulation/out
+flash-loan-simulation/cache
 

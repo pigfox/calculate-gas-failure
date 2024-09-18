@@ -32,8 +32,10 @@ flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 --match-contr
 flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 --match-contract FlashloanReceiverTest --debug test_flashloan
 flash-loan-simulation$ forge test --fork-url http://127.0.0.1:8545 --match-contract ExampleTest --debug test_logging
 
+forge test --fork-url http://127.0.0.1:8545 --match-contract ArbitrageTest --match-test test_arbitrage -vvv
+
 In terminal 3: $ go run main.go
 ```
-
+#geth --nousb
 
 
