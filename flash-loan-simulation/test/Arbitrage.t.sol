@@ -31,8 +31,10 @@ contract ArbitrageTest is Test {
         arbitrage = new Arbitrage(address(dex1), address(dex2), address(xtoken));
         xtoken.suppy(address(dex1), 25000);
         xtoken.suppy(address(dex2), 5000);
-        xtoken.suppy(address(arbitrage), 1000);
         xtoken.suppy(address(mfp), 100000);
+        console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));
+        mfp.transferToken(address(xtoken), address(arbitrage), 1000);//<-- fails here, suggest fix
+        console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         
         console.log("arbitrage:", address(arbitrage));
         console.log("xtoken:", address(xtoken));
