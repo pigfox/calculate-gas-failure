@@ -3,7 +3,7 @@ pragma solidity ^0.8.26;
 
 import "./XToken.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {console} from "../lib/forge-std/src/console.sol"; 
+import {console} from "../lib/forge-std/src/console.sol";
 
 interface IDex {
     function getPrice(address token) external view returns (uint256);
