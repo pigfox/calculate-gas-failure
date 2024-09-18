@@ -50,11 +50,11 @@ contract ArbitrageTest is Test {
         console.log("xtoken.balanceOf(address(dex2)):", xtoken.balanceOf(address(dex2)));
 
         // Use vm.record() to start tracking the transaction
-        vm.record();
+        //vm.record();
 
         // Perform the arbitrage operation (transaction)
         arbitrage.checkAndExecuteArbitrage(swapAmount);
-
+/*
         // Log transaction storage access and logs
         (bytes32[] memory reads, bytes32[] memory writes) = vm.accesses(address(arbitrage));
         console.log("Arbitrage transaction storage reads:");
@@ -66,7 +66,7 @@ contract ArbitrageTest is Test {
         for (uint i = 0; i < writes.length; i++) {
             console.logBytes32(writes[i]);
         }
-
+*/
         console.log("After swap");
         console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         console.log("xtoken.balanceOf(address(dex1)):", xtoken.balanceOf(address(dex1)));
