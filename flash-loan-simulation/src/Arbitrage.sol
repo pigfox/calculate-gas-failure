@@ -3,6 +3,7 @@ pragma solidity ^0.8.26;
 
 import "./XToken.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {console} from "../lib/forge-std/src/console.sol"; 
 
 interface IDex {
     function getPrice(address token) external view returns (uint256);
@@ -31,11 +32,14 @@ contract Arbitrage{
     function checkAndExecuteArbitrage(uint256 amount) external onlyOwner {
         uint256 priceDex1 = dex1.getPrice(address(xtoken));
         uint256 priceDex2 = dex2.getPrice(address(xtoken));
+        console.log("Price from DEX1: %d", priceDex1);
+        console.log("Price from DEX2: %d", priceDex2);
 
         // Calculate the price difference percentage
         uint256 priceDiff = priceDex1 > priceDex2
             ? ((priceDex1 - priceDex2) * 100) / priceDex1
             : ((priceDex2 - priceDex1) * 100) / priceDex2;
+        console.log("Price difference: %d", priceDiff);
         
         if (priceDiff >= threshold) {
             if (priceDex1 > priceDex2) {
