@@ -21,9 +21,9 @@ contract ArbitrageTest is Test {
         console.log("Begin Setup");
         mfp = new MockFlashLoanProvider();
         dex1 = new Dex1();
-        //vm.deal(address(dex1), 10 * 1e18);
+        vm.deal(address(dex1), 10 * 1e18);
         dex2 = new Dex2();
-        //vm.deal(address(dex2), 10 * 1e18);
+        vm.deal(address(dex2), 10 * 1e18);
         xtoken = new XToken(0);
         arbitrage = new Arbitrage(address(dex1), address(dex2), address(xtoken));
         xtoken.suppy(address(dex1), 25000);
