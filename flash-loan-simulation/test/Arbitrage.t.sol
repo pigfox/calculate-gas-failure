@@ -10,7 +10,7 @@ import {XToken} from "../src/XToken.sol";
 import {MockFlashLoanProvider} from "../src/MockFlashLoanProvider.sol";
 
 contract ArbitrageTest is Test {
-    uint swapAmount = 500;
+    uint swapAmount = 1000;
     Arbitrage public arbitrage;
     Dex1 public dex1;
     Dex2 public dex2;
@@ -19,6 +19,7 @@ contract ArbitrageTest is Test {
 
     function setUp() public {
         console.log("Begin Setup");
+        mfp = new MockFlashLoanProvider();
         dex1 = new Dex1();
         //vm.deal(address(dex1), 10 * 1e18);
         dex2 = new Dex2();
@@ -28,9 +29,8 @@ contract ArbitrageTest is Test {
         xtoken.suppy(address(dex1), 25000);
         xtoken.suppy(address(dex2), 5000);
         xtoken.suppy(address(arbitrage), 1000);
-        MockFlashLoanProvider mfp = new MockFlashLoanProvider();
         xtoken.suppy(address(mfp), 100000);
-
+        
         console.log("arbitrage:", address(arbitrage));
         console.log("xtoken:", address(xtoken));
         console.log("dex1:", address(dex1));
