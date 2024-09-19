@@ -32,18 +32,24 @@ contract ArbitrageTest is Test {
         xtoken.suppy(address(dex1), 25000);
         xtoken.suppy(address(dex2), 5000);
         xtoken.suppy(address(mfp), 100000);
-        console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));
-        mfp.transferToken(address(xtoken), address(arbitrage), 1000);//<-- fails here, suggest fix
-        console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
-        
+        uint256 dex1price = dex1.getPrice(address(xtoken));
+        uint256 dex2price = dex2.getPrice(address(xtoken));
+        if (dex1price > dex2price) {
+            swapAmount = 1000; //xtoken.balanceOf(address(dex1));
+        } else {
+            swapAmount = 1000; //xtoken.balanceOf(address(dex2));
+        }
+
+
+        mfp.transferToken(address(xtoken), address(arbitrage), 1000);
         console.log("arbitrage:", address(arbitrage));
         console.log("xtoken:", address(xtoken));
         console.log("dex1:", address(dex1));
         console.log("dex1.balance:", address(dex1).balance);
         console.log("dex2:", address(dex2));
         console.log("dex2.balance:", address(dex2).balance);
-        console.log("dex1.getPrice(address(xtoken)):", dex1.getPrice(address(xtoken)));
-        console.log("dex2.getPrice(address(xtoken)):", dex2.getPrice(address(xtoken)));
+        console.log("dex1.getPrice(address(xtoken)):", dex1price);
+        console.log("dex2.getPrice(address(xtoken)):", dex2price);
         console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));
         console.log("End Setup");
     }
