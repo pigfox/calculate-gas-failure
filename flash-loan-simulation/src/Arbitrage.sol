@@ -24,8 +24,8 @@ contract Arbitrage {
         require(msg.sender == owner, "Not the owner");
         _;
     }
-    
-    function checkAndExecuteArbitrage(uint256 amountBorrow) external onlyOwner {
+
+   function checkAndExecuteArbitrage(uint256 amountBorrow) external onlyOwner {
         console.log("Step 1: Borrow tokens from MockFlashLoanProvider");
         // Step 1: Borrow tokens from MockFlashLoanProvider
         flashLoanProvider.transferToken(address(token), address(this), amountBorrow);

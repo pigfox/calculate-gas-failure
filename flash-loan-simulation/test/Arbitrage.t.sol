@@ -12,7 +12,7 @@ import {MockFlashLoanProvider} from "../src/MockFlashLoanProvider.sol";
 
 contract ArbitrageTest is Test {
     uint swapAmount;
-    uint swapAmountBuffer = 5000;
+    uint swapAmountBuffer = 5;
     Arbitrage public arbitrage;
     Dex1 public dex1;
     Dex2 public dex2;
