@@ -2,7 +2,7 @@
 pragma solidity 0.8.26;
 
 import {Test} from "forge-std/Test.sol";
-import {console} from "../lib/forge-std/src/console.sol"; //<-- proper path
+import {console} from "../lib/forge-std/src/console.sol";
 import {Arbitrage} from "../src/Arbitrage.sol";
 import {Dex1} from "../src/Dex1.sol";
 import {Dex2} from "../src/Dex2.sol";
@@ -11,7 +11,8 @@ import {Vault} from "../src/Vault.sol";
 import {MockFlashLoanProvider} from "../src/MockFlashLoanProvider.sol";
 
 contract ArbitrageTest is Test {
-    uint swapAmount = 1000;
+    uint swapAmount;
+    uint swapAmountBuffer = 5000;
     Arbitrage public arbitrage;
     Dex1 public dex1;
     Dex2 public dex2;
@@ -28,18 +29,21 @@ contract ArbitrageTest is Test {
         dex2 = new Dex2();
         vm.deal(address(dex2), 10 * 1e18);
         xtoken = new XToken(0);
-        arbitrage = new Arbitrage(address(dex1), address(dex2), address(xtoken));
-        xtoken.suppy(address(dex1), 25000);
-        xtoken.suppy(address(dex2), 5000);
-        xtoken.suppy(address(mfp), 100000);
+        arbitrage = new Arbitrage(address(mfp),address(dex1), address(dex2), address(xtoken));
+        xtoken.supply(address(dex1), 25000);
+        xtoken.supply(address(dex2), 5000);
+        xtoken.supply(address(mfp), 100000);
         uint256 dex1price = dex1.getPrice(address(xtoken));
         uint256 dex2price = dex2.getPrice(address(xtoken));
-        if (dex1price > dex2price) {
-            swapAmount = 1000; //xtoken.balanceOf(address(dex1));
-        } else {
-            swapAmount = 1000; //xtoken.balanceOf(address(dex2));
-        }
+        uint256 dex1Balance = xtoken.balanceOf(address(dex1));
+        uint256 dex2Balance = xtoken.balanceOf(address(dex2));
 
+        if (dex1Balance > dex2Balance) {
+            swapAmount = dex2Balance - swapAmountBuffer;
+        } else {
+            swapAmount = dex1Balance - swapAmountBuffer;
+        }
+        console.log("swapAmount:", swapAmount);
 
         mfp.transferToken(address(xtoken), address(arbitrage), 1000);
         console.log("arbitrage:", address(arbitrage));
@@ -59,12 +63,14 @@ contract ArbitrageTest is Test {
         console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         console.log("xtoken.balanceOf(address(dex1)):", xtoken.balanceOf(address(dex1)));
         console.log("xtoken.balanceOf(address(dex2)):", xtoken.balanceOf(address(dex2)));
-
         // Use vm.record() to start tracking the transaction
         //vm.record();
 
         // Perform the arbitrage operation (transaction)
+        uint256 gasBefore = gasleft();
         arbitrage.checkAndExecuteArbitrage(swapAmount);
+        uint256 gasUsed = gasBefore - gasleft();
+        console.log("Gas used in transaction:", gasUsed);
 /*
         // Log transaction storage access and logs
         (bytes32[] memory reads, bytes32[] memory writes) = vm.accesses(address(arbitrage));

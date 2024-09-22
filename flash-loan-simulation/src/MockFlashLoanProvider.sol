@@ -29,10 +29,13 @@ contract MockFlashLoanProvider{
         payable(recipient).transfer(amount);
     }
 
-    function transferToken(address token, address recipient, uint256 amount) external onlyOwner {
+    function transferToken(address tokenAddress, address recipient, uint256 amount) external {
+        IERC20 token = IERC20(tokenAddress);
+        bool success = token.approve(address(this), amount);
+
+        require(success, "Token approval failed");
         IERC20(token).transfer(recipient, amount);
     }
-
 
     function borrow(address recipient, uint256 amount) external{
         require(amount <= address(this).balance, "Insufficient balance");

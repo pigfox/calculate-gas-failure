@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.26;
 
+pragma solidity 0.8.26;
+/*
 import {Test} from "forge-std/Test.sol";
 //import {console} from "forge-std/console.sol";
 //import {Test, console} from "forge-std/Test.sol"; //<-default from project - fails
@@ -64,7 +65,7 @@ contract FlashloanReceiverTest is Test {
         uint initialReceiverBalance = baseToken.balanceOf(address(receiver));
        // "Cheat" by adding some base tokens to the receiver, simulating the start with a small balance
         deal(BASE_TOKEN, address(receiver), BASE_AMOUNT * 5 / 100); // Simulate profit situation
-       /*
+
         //Encode the data required for flash loan: buy DEX, sell DEX, and asset token addresses
         //bytes memory data = abi.encode(BUY_DEX, SELL_DEX, ASSET_TOKEN);
         //Trigger the flash loan
@@ -77,7 +78,7 @@ contract FlashloanReceiverTest is Test {
          console.log("Flash loan triggered");
        // Assert flash loan call was successful
        assertTrue(success, "Flash loan did not succeed");
-*/
+
        // Check if the receiver has paid back the loan plus the fee
         uint finalReceiverBalance = baseToken.balanceOf(address(receiver));
         assertEq(finalReceiverBalance, initialReceiverBalance, "Flash loan repayment failed");

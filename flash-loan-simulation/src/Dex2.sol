@@ -13,7 +13,7 @@ contract Dex2 is IDex {
     uint256 private price = 95;
 
     // Implements the getPrice function
-    function getPrice(address token) external returns (uint256) {
+    function getPrice(address token) external view returns (uint256) {
         return price;
     }
     

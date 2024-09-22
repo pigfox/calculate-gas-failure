@@ -17,7 +17,7 @@ contract XToken is ERC20 {
         _;
     }
 
-    function suppy(address destination, uint256 amount) external onlyOwner{
+    function supply(address destination, uint256 amount) external onlyOwner{
         _mint(destination, amount);
     }
 }
