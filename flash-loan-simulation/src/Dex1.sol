@@ -17,7 +17,6 @@ contract Dex1 is IDex {
         return price;
     }
     
-    // Implements the swap function
     function swap(address tokenAddress, uint amount) public {
         IERC20 token = IERC20(tokenAddress);
         // Ensure Dex1 has enough balance for the swap

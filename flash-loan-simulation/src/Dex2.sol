@@ -12,12 +12,10 @@ interface IDex {
 contract Dex2 is IDex {
     uint256 private price = 95;
 
-    // Implements the getPrice function
     function getPrice(address token) external view returns (uint256) {
         return price;
     }
     
-    // Implements the swap function
     function swap(address tokenAddress, uint amount) public {
         IERC20 token = IERC20(tokenAddress);
         // Ensure Dex2 has enough balance for the swap
@@ -31,6 +29,7 @@ contract Dex2 is IDex {
         uint proceeds = amount * price / 100; // Just an example calculation
         require(token.transfer(msg.sender, proceeds), "Dex2: Transfer back failed");
     }
+    
     function balance() external view returns (uint256) {
         return address(this).balance;
     }
