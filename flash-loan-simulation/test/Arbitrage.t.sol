@@ -46,15 +46,17 @@ contract ArbitrageTest is Test {
         console.log("swapAmount:", swapAmount);
         console.log("dex1.getPrice(address(xtoken)):", dex1price);
         console.log("dex2.getPrice(address(xtoken)):", dex2price);
+
+        console.log("--Before flashloan--");
         console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));
-        
-        console.log("Before flashloan");
         console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         console.log("xtoken.balanceOf(address(dex1)):", xtoken.balanceOf(address(dex1)));
         console.log("xtoken.balanceOf(address(dex2)):", xtoken.balanceOf(address(dex2)));
 
         mfp.transferToken(address(xtoken), address(arbitrage), 1000);
-        console.log("After flashloan");
+
+        console.log("--After flashloan--");
+        console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));
         console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         console.log("xtoken.balanceOf(address(dex1)):", xtoken.balanceOf(address(dex1)));
         console.log("xtoken.balanceOf(address(dex2)):", xtoken.balanceOf(address(dex2)));
@@ -66,8 +68,6 @@ contract ArbitrageTest is Test {
         console.log("dex2:", address(dex2));
         console.log("ETH dex2.balance:", address(dex2).balance);
         */
-
-        console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));
         console.log("End Setup");
     }
 
