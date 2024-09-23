@@ -25,44 +25,45 @@ contract Arbitrage {
         _;
     }
 
-   function checkAndExecuteArbitrage(uint256 amountBorrow) external onlyOwner {
+    function checkAndExecuteArbitrage(uint256 amountBorrow) external onlyOwner {
         console.log("Step 1: Borrow tokens from MockFlashLoanProvider");
         // Step 1: Borrow tokens from MockFlashLoanProvider
         flashLoanProvider.transferToken(address(token), address(this), amountBorrow);
 
         console.log("Step 2: Transfer borrowed tokens to DEX2 (simulating buying tokens)");
         // Step 2: Transfer borrowed tokens to DEX2 (simulating buying tokens)
-        token.approve(dex2, amountBorrow); // Approve tokens for DEX2
+        token.approve(dex2, amountBorrow);
         token.transfer(dex2, amountBorrow);  // Simulated swap on DEX2
 
         console.log("Assume some profit after DEX2 \"swap\", get token balance back");
         // Assume some profit after DEX2 "swap", get token balance back
-        uint256 tokenBalanceAfterDex2 = token.balanceOf(address(this)); // Get the new token balance after swap
+        uint256 tokenBalanceAfterDex2 = token.balanceOf(address(dex2));  // Get the new token balance on DEX2
 
-        console.log("Step 3a: Approve tokens for transfer back to DEX1");
-        // Step 3: Approve tokens for transfer from DEX2 to DEX1
-        token.approve(dex1, tokenBalanceAfterDex2); // Approve tokens for DEX1
-
-        console.log("Step 3b: Transfer tokens back from DEX2 to DEX1 (simulating selling tokens)");
-        token.transfer(dex1, tokenBalanceAfterDex2);  // Simulated swap on DEX1
+        console.log("Step 3a: Transfer tokens back from DEX2 to DEX1 (simulating selling tokens)");
+        // Step 3: Transfer tokens back from DEX2 to DEX1 (simulating selling tokens)
+        token.approve(dex1, tokenBalanceAfterDex2);
+        console.log("Step 3: Transfer tokens back from DEX2 to DEX1 (simulating selling tokens)");
+        token.transferFrom(dex2, dex1, tokenBalanceAfterDex2);  // Simulated swap on DEX1
 
         console.log("Step 4: Ensure you have enough tokens to repay the loan");
         // Step 4: Ensure you have enough tokens to repay the loan
         uint256 finalBalance = token.balanceOf(address(this));
-        require(finalBalance >= amountBorrow, "No profit made");
+        require(finalBalance > amountBorrow, "No profit made");
         console.log("Final balance after DEX1 swap:", finalBalance);
-
         // Step 5: Repay flash loan
         token.transfer(address(flashLoanProvider), amountBorrow);
-
+        
         console.log("Step 6: Keep the profit");
         // Step 6: Keep the profit
         uint256 profit = finalBalance - amountBorrow;
-        if (profit > 0) {
-            token.transfer(owner, profit);
-        }
+        token.transfer(owner, profit);
+    }
+
+    function getDexTokenBalance(address dex) public view returns (uint256) {
+        return token.balanceOf(dex);
     }
 }
+
 
 
 /*
