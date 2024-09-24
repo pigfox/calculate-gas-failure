@@ -33,19 +33,26 @@ contract ArbitrageTest is Test {
         xtoken.supply(address(dex1), 25000);
         xtoken.supply(address(dex2), 5000);
         xtoken.supply(address(mfp), 100000);
+        dex1.setPrice(address(xtoken),125);
+        dex2.setPrice(address(xtoken),100);
         uint256 dex1price = dex1.getPrice(address(xtoken));
         uint256 dex2price = dex2.getPrice(address(xtoken));
         uint256 dex1Balance = xtoken.balanceOf(address(dex1));
         uint256 dex2Balance = xtoken.balanceOf(address(dex2));
+        uint256 dex1Value = dex1.valueOfTokens(address(xtoken));
+        uint256 dex2Value = dex2.valueOfTokens(address(xtoken));
 
         if (dex1Balance > dex2Balance) {
             swapAmount = dex2Balance - swapAmountBuffer;
         } else {
             swapAmount = dex1Balance - swapAmountBuffer;
         }
+
         console.log("swapAmount:", swapAmount);
         console.log("dex1.getPrice(address(xtoken)):", dex1price);
         console.log("dex2.getPrice(address(xtoken)):", dex2price);
+        console.log("dex1Value:", dex1Value);
+        console.log("dex2Value:", dex2Value);
 
         console.log("--Before flashloan--");
         console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));

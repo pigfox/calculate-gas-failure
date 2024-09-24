@@ -4,13 +4,18 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Dex2{
-    uint256 private xTokenprice = 95;
+    mapping(address => uint256) public tokenPrices;
 
-    function getPrice(address token) external view returns (uint256) {
-        return xTokenprice;
+    function setPrice(address _tokenAddress, uint _xTokenprice) external {
+        tokenPrices[_tokenAddress] = _xTokenprice;
     }
 
-    function balance() external view returns (uint256) {
-        return address(this).balance;
+    function getPrice(address _tokenAddress) external view returns (uint256) {
+        return tokenPrices[_tokenAddress];
+    }
+
+    function valueOfTokens(address _tokenAddress) external view returns (uint256) {
+        IERC20 token = IERC20(_tokenAddress);
+        return token.balanceOf(address(this)) * tokenPrices[_tokenAddress];
     }
 }
