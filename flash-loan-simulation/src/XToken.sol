@@ -8,8 +8,6 @@ contract XToken is ERC20 {
 
     constructor(uint256 initialSupply) ERC20("XToken", "XTK") {
         owner = msg.sender;
-        // Mint the initial supply to the contract deployer's address
-        _mint(msg.sender, initialSupply);
     }
 
     modifier onlyOwner() {
