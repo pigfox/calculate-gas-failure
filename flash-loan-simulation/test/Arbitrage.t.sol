@@ -4,18 +4,16 @@ pragma solidity 0.8.26;
 import {Test} from "forge-std/Test.sol";
 import {console} from "../lib/forge-std/src/console.sol";
 import {Arbitrage} from "../src/Arbitrage.sol";
-import {Dex1} from "../src/Dex1.sol";
-import {Dex2} from "../src/Dex2.sol";
+import {Dex} from "../src/Dex.sol";
 import {XToken} from "../src/XToken.sol";
 import {Vault} from "../src/Vault.sol";
 import {MockFlashLoanProvider} from "../src/MockFlashLoanProvider.sol";
 
 contract ArbitrageTest is Test {
     uint swapAmount;
-    uint swapAmountBuffer = 5;
     Arbitrage public arbitrage;
-    Dex1 public dex1;
-    Dex2 public dex2;
+    Dex public dex1;
+    Dex public dex2;
     XToken public xtoken;
     MockFlashLoanProvider public mfp;
     Vault public vault;
@@ -24,33 +22,31 @@ contract ArbitrageTest is Test {
         console.log("Begin Setup");
         mfp = new MockFlashLoanProvider();
         vault = new Vault();
-        dex1 = new Dex1();
+        dex1 = new Dex("1");
         //vm.deal(address(dex1), 10 * 1e18);
-        dex2 = new Dex2();
+        dex2 = new Dex("2");
         //vm.deal(address(dex2), 10 * 1e18);
         xtoken = new XToken(0);
-        arbitrage = new Arbitrage(address(mfp),address(dex1), address(dex2), address(xtoken));
+
         xtoken.supply(address(dex1), 25000);
         xtoken.supply(address(dex2), 5000);
         xtoken.supply(address(mfp), 100000);
-        dex1.setPrice(address(xtoken),125);
-        dex2.setPrice(address(xtoken),100);
-        uint256 dex1price = dex1.getPrice(address(xtoken));
-        uint256 dex2price = dex2.getPrice(address(xtoken));
+        dex1.setTokenPrice(address(xtoken),125);
+        dex2.setTokenPrice(address(xtoken),100);
         uint256 dex1Balance = xtoken.balanceOf(address(dex1));
         uint256 dex2Balance = xtoken.balanceOf(address(dex2));
         uint256 dex1Value = dex1.valueOfTokens(address(xtoken));
         uint256 dex2Value = dex2.valueOfTokens(address(xtoken));
+        console.log("dex1.getTokenPrice(address(xtoken)", dex1.getTokenPrice(address(xtoken)));
+        console.log("dex2.getTokenPrice(address(xtoken)", dex2.getTokenPrice(address(xtoken)));
 
         if (dex1Balance > dex2Balance) {
-            swapAmount = dex2Balance - swapAmountBuffer;
+            arbitrage = new Arbitrage(address(mfp),address(dex2), address(dex1), address(xtoken));
         } else {
-            swapAmount = dex1Balance - swapAmountBuffer;
+            arbitrage = new Arbitrage(address(mfp),address(dex1), address(dex2), address(xtoken));
         }
 
         console.log("swapAmount:", swapAmount);
-        console.log("dex1.getPrice(address(xtoken)):", dex1price);
-        console.log("dex2.getPrice(address(xtoken)):", dex2price);
         console.log("dex1Value:", dex1Value);
         console.log("dex2Value:", dex2Value);
 
