@@ -37,13 +37,18 @@ contract ArbitrageTest is Test {
         uint256 dex2Balance = xtoken.balanceOf(address(dex2));
         uint256 dex1Value = dex1.valueOfTokens(address(xtoken));
         uint256 dex2Value = dex2.valueOfTokens(address(xtoken));
+        uint256 dex1Price = dex1.getTokenPrice(address(xtoken));
+        uint256 dex2Price = dex2.getTokenPrice(address(xtoken));
+
         console.log("dex1.getTokenPrice(address(xtoken)", dex1.getTokenPrice(address(xtoken)));
         console.log("dex2.getTokenPrice(address(xtoken)", dex2.getTokenPrice(address(xtoken)));
 
-        if (dex1Balance > dex2Balance) {
+        if (dex1Price > dex2Price) {
             arbitrage = new Arbitrage(address(mfp),address(dex2), address(dex1), address(xtoken));
+            swapAmount = arbitrage.findMinimuBalance(dex2Balance, dex1Balance);
         } else {
             arbitrage = new Arbitrage(address(mfp),address(dex1), address(dex2), address(xtoken));
+            swapAmount = arbitrage.findMinimuBalance(dex1Balance, dex2Balance);
         }
 
         console.log("swapAmount:", swapAmount);

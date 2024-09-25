@@ -53,7 +53,7 @@ contract Arbitrage {
         console.log("Step 4: Ensure you have enough tokens to repay the loan");
         // Step 4: Ensure you have enough tokens to repay the loan
         uint256 finalBalance = token.balanceOf(address(this));
-        //require(finalBalance > amountBorrow, "No profit made");
+        require(finalBalance > amountBorrow, "No profit made");
         console.log("Final balance after DEX1 swap:", finalBalance);
         // Step 5: Repay flash loan
         token.transfer(address(flashLoanProvider), amountBorrow);
@@ -66,6 +66,13 @@ contract Arbitrage {
 
     function getDexTokenBalance(address dex) public view returns (uint256) {
         return token.balanceOf(dex);
+    }
+
+    function findMinimuBalance(uint256 v1, uint256 v2) public view returns (uint256) {
+        if (v1 < v2) {
+            return v1;
+        }
+        return v2;
     }
 }
 
