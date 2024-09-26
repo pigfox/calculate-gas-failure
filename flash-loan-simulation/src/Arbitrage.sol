@@ -32,8 +32,10 @@ contract Arbitrage {
         flashLoanProvider.transferToken(address(token), address(this), swapAmount);
 
         console.log("Step 2: Transfer borrowed tokens to DEX2 (simulating buying tokens)");
+        uint dex2TokenBalance = token.balanceOf(dex2);
         // Step 2: Transfer borrowed tokens to DEX2 (simulating buying tokens)
-        console.log("-->token.balanceOf(address(dex2)", token.balanceOf(address(dex2)));
+        console.log("dex2TokenBalance", dex2TokenBalance);
+        require(dex2TokenBalance >= swapAmount, "Swap amount too high");
         token.approve(dex2, swapAmount);
         token.transfer(dex2, swapAmount);  // Simulated swap on DEX2
 
