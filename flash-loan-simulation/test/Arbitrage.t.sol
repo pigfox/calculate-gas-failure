@@ -60,6 +60,8 @@ contract ArbitrageTest is Test {
         console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         console.log("xtoken.balanceOf(address(dex1)):", xtoken.balanceOf(address(dex1)));
         console.log("xtoken.balanceOf(address(dex2)):", xtoken.balanceOf(address(dex2)));
+        console.log("dex1.valueOfTokens(address(xtoken)):", dex1.valueOfTokens(address(xtoken)));
+        console.log("dex2.valueOfTokens(address(xtoken)):", dex2.valueOfTokens(address(xtoken)));
 
         mfp.transferToken(address(xtoken), address(arbitrage), 1000);
 
@@ -68,6 +70,8 @@ contract ArbitrageTest is Test {
         console.log("xtoken.balanceOf(address(arbitrage)):", xtoken.balanceOf(address(arbitrage)));
         console.log("xtoken.balanceOf(address(dex1)):", xtoken.balanceOf(address(dex1)));
         console.log("xtoken.balanceOf(address(dex2)):", xtoken.balanceOf(address(dex2)));
+        console.log("dex1.valueOfTokens(address(xtoken)):", dex1.valueOfTokens(address(xtoken)));
+        console.log("dex2.valueOfTokens(address(xtoken)):", dex2.valueOfTokens(address(xtoken)));
         /*
         console.log("arbitrage:", address(arbitrage));
         console.log("xtoken:", address(xtoken));
