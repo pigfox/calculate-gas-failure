@@ -32,12 +32,13 @@ contract MockFlashLoanProvider{
     function transferToken(address tokenAddress, address recipient, uint256 amount) external {
         IERC20 token = IERC20(tokenAddress);
         bool success = token.approve(address(this), amount);
-
-        require(success, "Token approval failed");
-        IERC20(token).transfer(recipient, amount);
+         require(success, "Token approval failed");
+       
+        success = IERC20(token).transfer(recipient, amount);
+        require(success, "Token transfer failed");
     }
 
-    function borrow(address recipient, uint256 amount) external{
+    function borrowETH(address recipient, uint256 amount) external{
         require(amount <= address(this).balance, "Insufficient balance");
         payable(recipient).transfer(amount);
     }

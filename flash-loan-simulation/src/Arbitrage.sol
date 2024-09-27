@@ -29,7 +29,10 @@ contract Arbitrage {
     function checkAndExecuteArbitrage(uint256 swapAmount) external onlyOwner {
         console.log("Step 1: Borrow tokens from MockFlashLoanProvider");
         // Step 1: Borrow tokens from MockFlashLoanProvider
-        flashLoanProvider.transferToken(address(token), address(this), swapAmount);
+        console.log("before flashLoanProvider.transferTokentoken.balanceOf(address(this))", token.balanceOf(address(this)));
+        console.log("before flashLoanProvider.transferToken address(flashLoanProvider))", token.balanceOf(address(flashLoanProvider)));
+        flashLoanProvider.transferToken(address(flashLoanProvider), address(this), swapAmount);
+        console.log("after flashloan token.balanceOf(address(this))", token.balanceOf(address(this)));
 
         console.log("Step 2: Transfer borrowed tokens to DEX2 (simulating buying tokens)");
         uint dex2TokenBalance = token.balanceOf(dex2);
