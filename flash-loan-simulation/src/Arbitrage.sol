@@ -73,7 +73,7 @@ contract Arbitrage {
         return token.balanceOf(dex);
     }
 
-    function findMinimuBalance(uint256 v1, uint256 v2) public view returns (uint256) {
+    function findMinimuBalance(uint256 v1, uint256 v2) public pure returns (uint256) {
         if (v1 < v2) {
             return v1;
         }

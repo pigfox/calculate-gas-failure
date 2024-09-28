@@ -2,6 +2,7 @@
 pragma solidity 0.8.26;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {console} from "../lib/forge-std/src/console.sol";
 
 contract MockFlashLoanProvider{
     address public owner;
@@ -32,9 +33,13 @@ contract MockFlashLoanProvider{
     function transferToken(address tokenAddress, address recipient, uint256 amount) external {
         IERC20 token = IERC20(tokenAddress);
 
+        console.log("Begin Transfer tokens from this contract's balance to the recipient");
         // Transfer tokens from this contract's balance to the recipient
-        bool success = token.transferFrom(msg.sender, recipient, amount);
+        (bool success, bytes memory data) = address(token).call(
+            abi.encodeWithSignature("transfer(address,uint256)", recipient, amount)
+        );
         require(success, "Token transfer failed");
+        console.log("End Transfer tokens from this contract's balance to the recipient");
     }
 
     function borrowETH(address recipient, uint256 amount) external{
