@@ -37,7 +37,7 @@ contract MockFlashLoanProvider{
         IERC20 token = IERC20(tokenAddress);
 
         //token.balanceOf(address(this));
-        emit OwnerLog(recipient, token.balanceOf(address(this)));
+        //emit OwnerLog(recipient, token.balanceOf(address(this)));
 
         // Transfer tokens from this contract's balance to the recipient
         (bool success, bytes memory data) = address(token).call(
