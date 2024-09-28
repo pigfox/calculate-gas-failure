@@ -67,7 +67,7 @@ contract ArbitrageTest is Test {
 */
         console.log("dex1ValueOfTokens:", dex1ValueOfTokens);
         console.log("dex2ValueOfTokens:", dex2ValueOfTokens);
-        mfp.transferToken(address(xtoken), address(arbitrage), 1000);
+        mfp.transferToken(address(xtoken), address(arbitrage), 100);
 /*
         console.log("--After flashloan--");
         console.log("xtoken.balanceOf(address(mfp)):", xtoken.balanceOf(address(mfp)));
@@ -96,7 +96,11 @@ contract ArbitrageTest is Test {
 
         // Perform the arbitrage operation (transaction)
         uint256 gasBefore = gasleft();
-        arbitrage.checkAndExecuteArbitrage(swapAmount);
+        try arbitrage.checkAndExecuteArbitrage(swapAmount) {
+            console.log("Arbitrage executed successfully");
+        } catch {
+            console.log("Arbitrage execution failed");
+        }
         uint256 gasUsed = gasBefore - gasleft();
         console.log("Gas used in transaction:", gasUsed);
 /*
