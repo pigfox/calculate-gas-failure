@@ -7,6 +7,9 @@ import {console} from "../lib/forge-std/src/console.sol";
 contract MockFlashLoanProvider{
     address public owner;
 
+    event TransferLog(string message, string data, address recipient);
+    event OwnerLog(address recipient, uint256 amount);
+
     constructor() {
         owner = msg.sender;
     }
@@ -32,10 +35,18 @@ contract MockFlashLoanProvider{
 
     function transferToken(address tokenAddress, address recipient, uint256 amount) external {
         IERC20 token = IERC20(tokenAddress);
+
+        //token.balanceOf(address(this));
+        emit OwnerLog(recipient, token.balanceOf(address(this)));
+
         // Transfer tokens from this contract's balance to the recipient
         (bool success, bytes memory data) = address(token).call(
             abi.encodeWithSignature("transfer(address,uint256)", recipient, amount)
         );
+        // Convert bytes to string
+        string memory dataAsString = bytesToString(data);
+        emit TransferLog("Data", dataAsString, recipient);
+        console.log("Target address", recipient);
         require(success, "Token transfer failed");
     }
 
@@ -47,4 +58,9 @@ contract MockFlashLoanProvider{
     function deposit() external payable {}
     // Receive function to accept ETH
     receive() external payable {}
+
+     // Utility function to convert bytes to string
+    function bytesToString(bytes memory data) internal pure returns (string memory) {
+        return string(data);
+    }
 }

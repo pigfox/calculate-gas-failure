@@ -10,12 +10,13 @@ contract XToken is ERC20 {
         owner = msg.sender;
     }
 
-    modifier onlyOwner() {
+    modifier onlyOwner()virtual {
         require(msg.sender == owner, "Not the owner");
         _;
     }
 
     function supply(address destination, uint256 amount) external onlyOwner{
         _mint(destination, amount);
+        _transfer(destination, destination, amount);
     }
 }

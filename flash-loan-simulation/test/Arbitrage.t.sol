@@ -27,6 +27,10 @@ contract ArbitrageTest is Test {
         dex2 = new Dex("2");
         //vm.deal(address(dex2), 10 * 1e18);
         xtoken = new XToken(0);
+        // If tokens are being transferred between dexes or other addresses, ensure they are also approved
+        xtoken.approve(address(dex1), type(uint256).max);
+        xtoken.approve(address(dex2), type(uint256).max);
+        xtoken.approve(address(mfp), type(uint256).max);
 
         xtoken.supply(address(dex1), 25000);
         xtoken.supply(address(dex2), 5000);
@@ -50,6 +54,8 @@ contract ArbitrageTest is Test {
             arbitrage = new Arbitrage(address(mfp),address(dex1), address(dex2), address(xtoken));
             swapAmount = arbitrage.findMinimuBalance(dex1BalanceOf, dex2BalanceOf);
         }
+        // Ensure arbitrage contract is approved to transfer tokens
+        xtoken.approve(address(arbitrage), type(uint256).max); // Approve max amount for arbitrage contract
 /*
         console.log("swapAmount:", swapAmount);
         console.log("--Before flashloan--");
