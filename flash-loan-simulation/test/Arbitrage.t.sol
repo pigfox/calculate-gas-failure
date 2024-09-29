@@ -26,10 +26,7 @@ contract ArbitrageTest is Test {
         dex1 = new Dex("1");
         dex2 = new Dex("2");
         xtoken = new XToken(0);
-        // If tokens are being transferred between dexes or other addresses, ensure they are also approved
-        xtoken.approve(address(dex1), type(uint256).max);
-        xtoken.approve(address(dex2), type(uint256).max);
-        xtoken.approve(address(mfp), type(uint256).max);
+
         //Supply tokens to dexes and mfp
         xtoken.supply(address(dex1), 25000);
         xtoken.supply(address(dex2), 5000);
@@ -37,6 +34,7 @@ contract ArbitrageTest is Test {
         //Set token price per dex
         dex1.setTokenPrice(address(xtoken),125);
         dex2.setTokenPrice(address(xtoken),100);
+
         uint256 dex1BalanceOf = xtoken.balanceOf(address(dex1));
         uint256 dex2BalanceOf = xtoken.balanceOf(address(dex2));
         uint256 dex1ValueOfTokens = dex1.valueOfTokens(address(xtoken));
@@ -47,7 +45,7 @@ contract ArbitrageTest is Test {
         console.log("dex1TokenPrice", dex1TokenPrice);
         console.log("dex2TokenPrice", dex2TokenPrice);
         //Creating contract arbitrage here, since it depends on the token balances of dex1 and dex2
-        //SwapAmount is the minimum of the two balances
+        //SwapAmount is the minimum of the two balances, buy from lower price and sell to higher price
         if (dex1TokenPrice > dex2TokenPrice) {
             arbitrage = new Arbitrage(address(mfp),address(dex2), address(dex1), address(xtoken));
             swapAmount = arbitrage.findMinimuBalance(dex2BalanceOf, dex1BalanceOf);
