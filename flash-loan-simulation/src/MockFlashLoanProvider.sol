@@ -10,6 +10,7 @@ contract MockFlashLoanProvider{
 
     event TransferLog(string message, string data, address recipient);
     event OwnerLog(address recipient, uint256 amount);
+    error TransferError(string message, string data, address recipient);
 
     constructor() {
         owner = msg.sender;
@@ -46,8 +47,12 @@ contract MockFlashLoanProvider{
         );
         // Convert bytes to string
         string memory dataAsString = bytesToString(data);
-        emit TransferLog("Data", dataAsString, recipient);
-        require(success, "Token transfer failed");
+
+        if(success){
+            emit TransferLog("Data", dataAsString, recipient);
+        }else{
+            revert TransferError("Token transfer failed", dataAsString, recipient);
+        }
     }
 
     function borrowETH(address recipient, uint256 amount) external{
