@@ -31,6 +31,7 @@ contract ArbitrageTest is Test {
         xtoken.supply(address(dex1), 25000);
         xtoken.supply(address(dex2), 5000);
         xtoken.supply(address(mfp), 1000000);
+
         //Set token price per dex
         dex1.setTokenPrice(address(xtoken),125);
         dex2.setTokenPrice(address(xtoken),100);
@@ -44,6 +45,7 @@ contract ArbitrageTest is Test {
 
         console.log("dex1TokenPrice", dex1TokenPrice);
         console.log("dex2TokenPrice", dex2TokenPrice);
+        
         //Creating contract arbitrage here, since it depends on the token balances of dex1 and dex2
         //SwapAmount is the minimum of the two balances, buy from lower price and sell to higher price
         if (dex1TokenPrice > dex2TokenPrice) {
