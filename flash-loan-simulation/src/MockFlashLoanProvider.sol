@@ -45,9 +45,9 @@ contract MockFlashLoanProvider{
         (bool success, bytes memory data) = address(token).call(
             abi.encodeWithSignature("transfer(address,uint256)", recipient, amount)
         );
+        
         // Convert bytes to string
         string memory dataAsString = bytesToString(data);
-
         if(success){
             emit TransferLog("Data", dataAsString, recipient);
         }else{

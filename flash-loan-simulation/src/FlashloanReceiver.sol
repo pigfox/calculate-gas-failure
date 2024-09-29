@@ -57,6 +57,7 @@ contract FlashloanReceiver is IERC3156FlashBorrower {
         uint256 fee,
         bytes calldata data
     ) external override returns (bytes32) { //need for override keyword? don't think so
+        initiator; //silence warning
         (address buyDexAddress, address sellDexAddress, address assetTokenAddress) = abi.decode(data, (address, address, address));
         IUniswapRouter buyDex = IUniswapRouter(buyDexAddress);
         IUniswapRouter sellDex = IUniswapRouter(sellDexAddress);
