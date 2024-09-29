@@ -47,7 +47,6 @@ contract MockFlashLoanProvider{
         // Convert bytes to string
         string memory dataAsString = bytesToString(data);
         emit TransferLog("Data", dataAsString, recipient);
-        console.log("Target address", recipient);
         require(success, "Token transfer failed");
     }
 
