@@ -45,7 +45,7 @@ contract ArbitrageTest is Test {
 
         console.log("dex1TokenPrice", dex1TokenPrice);
         console.log("dex2TokenPrice", dex2TokenPrice);
-        
+
         //Creating contract arbitrage here, since it depends on the token balances of dex1 and dex2
         //SwapAmount is the minimum of the two balances, buy from lower price and sell to higher price
         if (dex1TokenPrice > dex2TokenPrice) {
@@ -55,8 +55,6 @@ contract ArbitrageTest is Test {
             arbitrage = new Arbitrage(address(mfp),address(dex1), address(dex2), address(xtoken));
             swapAmount = arbitrage.findMinimuBalance(dex1BalanceOf, dex2BalanceOf);
         }
-        // Ensure arbitrage contract is approved to transfer tokens
-        xtoken.approve(address(arbitrage), type(uint256).max); // Approve max amount for arbitrage contract
 /*
         console.log("swapAmount:", swapAmount);
         console.log("--Before flashloan--");
