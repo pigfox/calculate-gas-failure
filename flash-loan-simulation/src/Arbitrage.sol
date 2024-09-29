@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
+//The actual contract that makes the arbitrage swap
 pragma solidity 0.8.26;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -80,53 +81,3 @@ contract Arbitrage {
         return v2;
     }
 }
-
-
-
-/*
-// Inside the flashLoan callback or execution flow of your contract
-
-// 1. Borrow tokens from DEX2 instead of DEX1.
-// Assuming dex2 is the address of DEX2, borrow the tokens from there.
-// If you're using a flash loan service, initiate the loan from DEX2 for the tokens.
-
-IERC20 token2 = IERC20(token2Address); // DEX2's token
-
-// Assuming flash loan from DEX2, the logic would look like this:
-dex2.flashLoan(address(this), token2Address, swapAmount, data);
-
-// Now that you've borrowed from DEX2, you want to use the borrowed amount to purchase DEX2 tokens.
-// 2. Use the borrowed amount to buy tokens from DEX2.
-uint256 amountToSpend = swapAmount; // this is the amount you borrowed
-
-// Approve DEX2 to spend the borrowed amount
-token2.approve(dex2Address, amountToSpend);
-
-// Execute the swap on DEX2, buying as many tokens as you can with the borrowed amount.
-// You need to swap `amountToSpend` worth of token2 for tokens on DEX2.
-dex2.swapExactTokensForTokens(amountToSpend, 0, path2, address(this), block.timestamp);
-
-// 3. Now, you have acquired tokens from DEX2. The next step is to sell them on DEX1.
-// Get the balance of tokens after the swap on DEX2.
-uint256 tokenBalance = token2.balanceOf(address(this));
-
-// Approve DEX1 to spend the tokens you acquired from DEX2.
-token2.approve(dex1Address, tokenBalance);
-
-// Execute the swap on DEX1, selling the tokens for profit.
-// This is where you sell the tokens you bought from DEX2 to DEX1 at a better price.
-dex1.swapExactTokensForTokens(tokenBalance, 0, path1, address(this), block.timestamp);
-
-// 4. After the swap, calculate profit and repay the flash loan to DEX2.
-uint256 finalBalance = token2.balanceOf(address(this));
-
-// Ensure you have enough profit to cover the flash loan repayment.
-require(finalBalance > swapAmount, "No profit was made");
-
-// Repay the flash loan to DEX2.
-token2.transfer(dex2Address, swapAmount);
-
-// Keep the profit (finalBalance - swapAmount) as your arbitrage gain.
-uint256 profit = finalBalance - swapAmount;
-
-*/
