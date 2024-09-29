@@ -8,10 +8,10 @@ After contract initializations the contract will be supplied with XTokens.
 The dexes will be assigned various XToken values per dex.
 If dex1TokenPrice == dex2TokenPrice no arbitrage opportunity exists.
 DexTokenPrices are compared to detrmine arbigtrage direction.
+SwapAmount is determined to be the lowest balanceOf value of the Tokens per dex.
 
 
-
-To run this simulation.
+To run this simulation and see errors in RED.
 In terminal 1: $ anvil
 In terminal 2: flash-loan-simulation$ ./run.sh
 
