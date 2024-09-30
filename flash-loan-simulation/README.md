@@ -9,6 +9,10 @@ The dexes will be assigned various XToken values per dex.
 If dex1TokenPrice == dex2TokenPrice no arbitrage opportunity exists.
 DexTokenPrices are compared to detrmine arbigtrage direction.
 SwapAmount is determined to be the lowest balanceOf value of the Tokens per dex.
+XToken -> MockFlashLoanProvider
+Arbitrage flashloan <- MockFlashLoanProvider
+Arbitrage buys from one Dex and seels to the other Dex. //<-- probable error here, Arbitrage deos not own XTokens borrowed. 
+
 
 
 To run this simulation and see errors in RED.
